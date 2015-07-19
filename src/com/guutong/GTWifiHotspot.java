@@ -47,7 +47,7 @@ public class GTWifiHotspot extends javax.swing.JFrame {
     SystemTray tray;
 
     public GTWifiHotspot() {
-        setTitle("GT-WiFi Hotspot v.1.0");
+        setTitle("GT-WiFi Hotspot v.1.0.0-b.2");
         HideToSystemTray();
         setIcon();
         initComponents();
@@ -297,7 +297,7 @@ public class GTWifiHotspot extends javax.swing.JFrame {
         try {
             String curVersion = Updater.getCurrentVersion();
             String lastVersion = Updater.getVersionUpdate();
-            if (curVersion.equals("v1.0.0-b.2")) {
+            if (curVersion.equals(lastVersion)) {
                 jTextDialog.setText("Software version latest!" + Updater.getCurrentVersion());
             } else {
 
