@@ -5,9 +5,34 @@
  */
 package com.guutong;
 
+import java.awt.AWTException;
+import java.awt.Desktop;
+import java.awt.Image;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
 import java.awt.Toolkit;
+import java.awt.TrayIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -18,8 +43,12 @@ public class GTWifiHotspot extends javax.swing.JFrame {
     /**
      * Creates new form GTWifiHotspot
      */
+    TrayIcon trayIcon;
+    SystemTray tray;
+
     public GTWifiHotspot() {
         setTitle("GT-WiFi Hotspot v.1.0");
+        HideToSystemTray();
         setIcon();
         initComponents();
         ExecuteShellCommand executetitle = new ExecuteShellCommand();
@@ -52,7 +81,12 @@ public class GTWifiHotspot extends javax.swing.JFrame {
         jFieldPass = new javax.swing.JTextField();
         jButtonStart = new javax.swing.JButton();
         jButtonStop = new javax.swing.JButton();
-        jButtonAbout = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuExit = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuUpdater = new javax.swing.JMenuItem();
+        jMenuAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -114,12 +148,39 @@ public class GTWifiHotspot extends javax.swing.JFrame {
             }
         });
 
-        jButtonAbout.setText("About");
-        jButtonAbout.addActionListener(new java.awt.event.ActionListener() {
+        jMenu1.setText("File");
+
+        jMenuExit.setText("Exit");
+        jMenuExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAboutActionPerformed(evt);
+                jMenuExitActionPerformed(evt);
             }
         });
+        jMenu1.add(jMenuExit);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Help");
+
+        jMenuUpdater.setText("Check for Updates");
+        jMenuUpdater.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuUpdaterActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuUpdater);
+
+        jMenuAbout.setText("About");
+        jMenuAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuAboutActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuAbout);
+
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -128,7 +189,6 @@ public class GTWifiHotspot extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButtonAbout, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButtonSet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -167,10 +227,8 @@ public class GTWifiHotspot extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonStart)
                     .addComponent(jButtonStop))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonAbout)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -210,16 +268,6 @@ public class GTWifiHotspot extends javax.swing.JFrame {
         jTextDialog.setText(outputStop);
     }//GEN-LAST:event_jButtonStopActionPerformed
 
-    private void jButtonAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAboutActionPerformed
-        // TODO add your handling code here:
-        jTextDialog.setText("GT-WiFi Hotspot v.1.0 \r\n\r\n\r\n"
-                + "This program is (Program Developer)\r\n"
-                + "me has given to all participants \r\nbe used for free (FREE),\r\n"
-                + "you do not have to cost you anything\r\n\r\n\r\n"
-                + "Dev.by Mr.Pornmongkon Pongsai\r\n"
-                + "blog : http://guutong.blogspot.com/");
-    }//GEN-LAST:event_jButtonAboutActionPerformed
-
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
         ExecuteShellCommand executeClose = new ExecuteShellCommand();
@@ -228,6 +276,38 @@ public class GTWifiHotspot extends javax.swing.JFrame {
         jTextDialog.setText(outputClose);
     }//GEN-LAST:event_formWindowClosing
 
+    private void jMenuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAboutActionPerformed
+        // TODO add your handling code here:
+        jTextDialog.setText("GT-WiFi Hotspot v.1.0.0-b2 \r\n\r\n\r\n"
+                + "This program is (Program Developer)\r\n"
+                + "me has given to all participants \r\nbe used for free (FREE),\r\n"
+                + "you do not have to cost you anything\r\n\r\n\r\n"
+                + "Dev.by Mr.Pornmongkon Pongsai\r\n"
+                + "blog : http://guutong.blogspot.com/");
+    }//GEN-LAST:event_jMenuAboutActionPerformed
+
+    private void jMenuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExitActionPerformed
+        // TODO add your handling code here:
+        execStop();
+        System.exit(0);
+    }//GEN-LAST:event_jMenuExitActionPerformed
+
+    private void jMenuUpdaterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuUpdaterActionPerformed
+
+        try {
+            String curVersion = Updater.getCurrentVersion();
+            String lastVersion = Updater.getVersionUpdate();
+            if (curVersion.equals("v1.0.0-b.2")) {
+                jTextDialog.setText("Software version latest!" + Updater.getCurrentVersion());
+            } else {
+
+                jTextDialog.setText("Software is new version!\n"
+                        + "Download :" + Updater.getLinkDownload());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_jMenuUpdaterActionPerformed
     /**
      * @param args the command line arguments
      */
@@ -264,7 +344,6 @@ public class GTWifiHotspot extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonAbout;
     private javax.swing.JButton jButtonSet;
     private javax.swing.JButton jButtonStart;
     private javax.swing.JButton jButtonStatus;
@@ -273,6 +352,12 @@ public class GTWifiHotspot extends javax.swing.JFrame {
     private javax.swing.JTextField jFieldSsid;
     private javax.swing.JLabel jLabelPass;
     private javax.swing.JLabel jLabelSsid;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuItem jMenuAbout;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuExit;
+    private javax.swing.JMenuItem jMenuUpdater;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextDialog;
     // End of variables declaration//GEN-END:variables
@@ -280,10 +365,93 @@ public class GTWifiHotspot extends javax.swing.JFrame {
     private void setIcon() {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("icon.png")));
     }
-    public void execStart(){
+
+    public void execStart() {
         ExecuteShellCommand executeStart = new ExecuteShellCommand();
         String commandStart = "netsh wlan start hostednetwork";
         String outputStart = executeStart.executeCommand(commandStart);
         jTextDialog.setText(outputStart);
+    }
+
+    public void execStop() {
+        ExecuteShellCommand executeStart = new ExecuteShellCommand();
+        String commandStart = "netsh wlan stop hostednetwork";
+        String outputStart = executeStart.executeCommand(commandStart);
+        jTextDialog.setText(outputStart);
+    }
+
+    public void HideToSystemTray() {
+        System.out.println("creating instance");
+        try {
+            System.out.println("setting look and feel");
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            System.out.println("Unable to set LookAndFeel");
+        }
+        if (SystemTray.isSupported()) {
+            System.out.println("system tray supported");
+            tray = SystemTray.getSystemTray();
+
+            Image image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("icon.png"));
+            ActionListener exitListener = new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Exiting....");
+                    System.exit(0);
+                }
+            };
+            PopupMenu popup = new PopupMenu();
+            MenuItem defaultItem = new MenuItem("Open");
+            defaultItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    setVisible(true);
+                    setExtendedState(JFrame.NORMAL);
+                }
+            });
+            popup.add(defaultItem);
+            defaultItem = new MenuItem("Exit");
+            defaultItem.addActionListener(exitListener);
+            popup.add(defaultItem);
+            trayIcon = new TrayIcon(image, "GT-WiFi Hotspot", popup);
+            trayIcon.setImageAutoSize(true);
+        } else {
+            System.out.println("system tray not supported");
+        }
+        addWindowStateListener(new WindowStateListener() {
+            public void windowStateChanged(WindowEvent e) {
+                if (e.getNewState() == ICONIFIED) {
+                    try {
+                        tray.add(trayIcon);
+                        trayIcon.displayMessage("GT-WiFi Hotspot",
+                            "GT-WiFi Hotspot Hide!",
+                            TrayIcon.MessageType.INFO);              
+                        setVisible(false);
+                        System.out.println("added to SystemTray");
+                    } catch (AWTException ex) {
+                        System.out.println("unable to add to tray");
+                    }
+                }
+                if (e.getNewState() == 7) {
+                    try {
+                        tray.add(trayIcon);
+                        setVisible(false);
+                        System.out.println("added to SystemTray");
+                    } catch (AWTException ex) {
+                        System.out.println("unable to add to system tray");
+                    }
+                }
+                if (e.getNewState() == MAXIMIZED_BOTH) {
+                    tray.remove(trayIcon);
+                    setVisible(true);
+                    System.out.println("Tray icon removed");
+                }
+                if (e.getNewState() == NORMAL) {
+                    tray.remove(trayIcon);
+                    setVisible(true);
+                    System.out.println("Tray icon removed");
+                }
+            }
+        });
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
