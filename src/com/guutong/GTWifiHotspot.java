@@ -278,7 +278,7 @@ public class GTWifiHotspot extends javax.swing.JFrame {
 
     private void jMenuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAboutActionPerformed
         // TODO add your handling code here:
-        jTextDialog.setText("GT-WiFi Hotspot v.1.0.0-b2 \r\n\r\n\r\n"
+        jTextDialog.setText("GT-WiFi Hotspot v.1.0.0-b.2 \r\n\r\n\r\n"
                 + "This program is (Program Developer)\r\n"
                 + "me has given to all participants \r\nbe used for free (FREE),\r\n"
                 + "you do not have to cost you anything\r\n\r\n\r\n"
