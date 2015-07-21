@@ -22,7 +22,7 @@ import org.json.simple.JSONObject;
 public class Updater {
 
     private final static String lastVersionURL = "https://api.github.com/repos/Guutong/GT-WifiHotspot/releases/latest";
-    private final static String currentVersionURL = "https://api.github.com/repos/Guutong/GT-WifiHotspot/releases/tags/v1.0.0-b.1";
+    private final static String currentVersionURL = "https://api.github.com/repos/Guutong/GT-WifiHotspot/releases/tags/v1.0.0-b.2";
 
     public static String getVersionUpdate() throws Exception {
         JSONParser parser = new JSONParser();
